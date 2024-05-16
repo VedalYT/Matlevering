@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['customer_id'] = $customer_id;
                 $_SESSION['email'] = $email;
 
-                header('Location: index.html');
+                header('Location: index.php');
                 exit;
             } else {
                 $error = "Noe gikk galt. Vennligst prøv igjen senere.";

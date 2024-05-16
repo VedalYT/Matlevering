@@ -44,9 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->execute()) {
         // Tøm handlekurven
         echo "<script>localStorage.removeItem('cart');</script>";
-        echo '<p>Bestillingen din er bekreftet!</p>';
+        echo '<div class="confirmation">';
+        echo '<h2>Bestillingen din er bekreftet!</h2>';
         echo '<p>Kjøpet ble gjort kl. ' . date('H:i', strtotime($orderTime)) . '.</p>';
         echo '<p>Forventet levering innen kl. ' . date('H:i', strtotime($deliveryTime)) . '.</p>';
+        echo '<p>Takk for at du bestilte hos oss. Vi håper du nyter måltidet ditt!</p>';
+        echo '<a href="index.php" class="back-button">Tilbake til forsiden</a>';
+        echo '</div>';
     } else {
         echo '<p>Noe gikk galt. Vennligst prøv igjen senere.</p>';
     }
@@ -64,11 +68,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
+        }
+        .confirmation {
+            text-align: center;
+            margin-top: 50px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .confirmation h2 {
+            margin-bottom: 20px;
+        }
+        .confirmation p {
+            margin-bottom: 10px;
         }
         table {
             width: 80%;
@@ -86,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .total {
             font-weight: bold;
         }
-        .checkout-button, .update-button {
+        .checkout-button, .update-button, .history-button {
             padding: 10px 20px;
             background-color: #28a745;
             color: white;
@@ -94,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 4px;
             cursor: pointer;
         }
-        .checkout-button:hover, .update-button:hover {
+        .checkout-button:hover, .update-button:hover, .history-button:hover {
             background-color: #218838;
         }
         .delete-button {
@@ -109,15 +127,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #c82333;
         }
         .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             padding: 10px 20px;
             background-color: #6c757d;
             color: white;
             text-decoration: none;
             border-radius: 4px;
             font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
         }
         .back-button:hover {
             background-color: #5a6268;
@@ -134,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Handlekurv</h1>
     <div id="cart-container"></div>
     <button class="checkout-button" onclick="checkout()">Bekreft Bestilling</button>
+    <a href="history.php" class="history-button">Se Bestillingshistorikk</a>
 
     <script>
         function loadCart() {

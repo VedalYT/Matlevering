@@ -121,6 +121,18 @@
         .cart-button:hover {
             background-color: #218838;
         }
+        .history-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .history-button:hover {
+            background-color: #138496;
+        }
     </style>
 </head>
 <body>
@@ -130,6 +142,7 @@
         echo '<div class="user-info">';
         echo '<p>Logget inn som: ' . htmlspecialchars($_SESSION['email']) . '</p>';
         echo '<a href="logout_customer.php">Logg ut</a>';
+     
         echo '</div>';
     } else {
         echo '<div class="dropdown">';
