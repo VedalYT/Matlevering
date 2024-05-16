@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,7 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':password', $hashed_password, PDO::PARAM_STR);
 
             if ($stmt->execute()) {
-                header('Location: login_customer.php');
+                // Automatisk logg inn kunden
+                $customer_id = $pdo->lastInsertId();
+                session_regenerate_id();
+                $_SESSION['customer_loggedin'] = true;
+                $_SESSION['customer_id'] = $customer_id;
+                $_SESSION['email'] = $email;
+
+                header('Location: index.php');
                 exit;
             } else {
                 $error = "Noe gikk galt. Vennligst prøv igjen senere.";
@@ -38,23 +46,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Registrer Kunde</title>
     <style>
         /* Legg til stiler her */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .register-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .register-container h2 {
+            margin-bottom: 20px;
+        }
+        .register-container label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        .register-container input[type="email"],
+        .register-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .register-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .register-container button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
-    <h2>Registrer deg som kunde</h2>
-    <form action="register_customer.php" method="post">
-        <label for="email">E-post:</label>
-        <input type="email" name="email" required>
-        <br>
-        <label for="password">Passord:</label>
-        <input type="password" name="password" required>
-        <br>
-        <label for="confirm_password">Bekreft Passord:</label>
-        <input type="password" name="confirm_password" required>
-        <br>
-        <?php if (isset($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
-        <button type="submit">Registrer</button>
-    </form>
-    <a href="login_customer.php">Har du allerede en konto? Logg inn her.</a>
+    <div class="register-container">
+        <h2>Registrer deg som kunde</h2>
+        <form action="register_customer.php" method="post">
+            <label for="email">E-post:</label>
+            <input type="email" name="email" required>
+            <br>
+            <label for="password">Passord:</label>
+            <input type="password" name="password" required>
+            <br>
+            <label for="confirm_password">Bekreft Passord:</label>
+            <input type="password" name="confirm_password" required>
+            <br>
+            <?php if (isset($error)) { echo "<p class='error'>$error</p>"; } ?>
+            <button type="submit">Registrer</button>
+        </form>
+        <a href="login_customer.php">Har du allerede en konto? Logg inn her.</a>
+    </div>
 </body>
 </html>
