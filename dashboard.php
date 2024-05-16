@@ -1,11 +1,12 @@
 <?php
 session_start();
-require_once 'config.php';
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('location: login.php');
+    header('Location: login.php');
     exit;
 }
+
+require_once 'config.php';
 
 // Hent menyen for den innloggede brukeren
 $user_id = $_SESSION['id'];
@@ -13,7 +14,7 @@ $sql = "SELECT * FROM menus WHERE user_id = :user_id";
 if ($stmt = $pdo->prepare($sql)) {
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     if ($stmt->execute()) {
-        $menus = $stmt->fetchAll();
+        $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     unset($stmt);
 }
@@ -52,5 +53,6 @@ unset($pdo);
         <?php endforeach; ?>
     </table>
     <a href="add_dish.php">Legg til ny rett</a>
+    <a href="logout.php">Logg ut</a>
 </body>
 </html>
