@@ -52,18 +52,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Logg inn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-bottom: 15px;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
-    <h2>Logg inn</h2>
-    <form action="login.php" method="post">
-        <label for="username">Brukernavn:</label>
-        <input type="text" name="username" required>
-        <br>
-        <label for="password">Passord:</label>
-        <input type="password" name="password" required>
-        <br>
-        <button type="submit">Logg inn</button>
-    </form>
-    <?php if (isset($error)) { echo "<p>$error</p>"; } ?>
+    <a href="javascript:history.back()" class="back-button">Tilbake</a>
+    <div class="login-container">
+        <h2>Logg inn</h2>
+        <form action="login.php" method="post">
+            <label for="username">Brukernavn:</label>
+            <input type="text" name="username" required>
+            <label for="password">Passord:</label>
+            <input type="password" name="password" required>
+            <?php if (isset($error)) { echo "<p class='error'>$error</p>"; } ?>
+            <button type="submit">Logg inn</button>
+        </form>
+    </div>
 </body>
 </html>
