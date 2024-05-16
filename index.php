@@ -42,9 +42,10 @@
             border-radius: 8px;
         }
         .dropdown {
-            position: relative;
+            position: absolute;
+            top: 20px;
+            left: 20px;
             display: inline-block;
-            margin-bottom: 20px;
         }
         .dropdown-content {
             display: none;
@@ -92,9 +93,7 @@
             background-color: #5a6268;
         }
         .user-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            margin-bottom: 20px;
             background-color: #f8f9fa;
             padding: 10px;
             border-radius: 8px;
@@ -110,6 +109,18 @@
         .user-info a:hover {
             text-decoration: underline;
         }
+        .cart-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .cart-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +130,14 @@
         echo '<div class="user-info">';
         echo '<p>Logget inn som: ' . htmlspecialchars($_SESSION['email']) . '</p>';
         echo '<a href="logout_customer.php">Logg ut</a>';
+        echo '</div>';
+    } else {
+        echo '<div class="dropdown">';
+        echo '<button class="dropbtn">Logg inn / Registrer</button>';
+        echo '<div class="dropdown-content">';
+        echo '<a href="login_customer.php">Logg inn som Kunde</a>';
+        echo '<a href="register_customer.php">Registrer deg som Kunde</a>';
+        echo '</div>';
         echo '</div>';
     }
     ?>
@@ -133,17 +152,7 @@
 
     <div id="menu-container"></div>
 
-    <?php
-    if (!isset($_SESSION['customer_loggedin']) || $_SESSION['customer_loggedin'] !== true) {
-        echo '<div class="dropdown">';
-        echo '<button class="dropbtn">Logg inn / Registrer</button>';
-        echo '<div class="dropdown-content">';
-        echo '<a href="login_customer.php">Logg inn som Kunde</a>';
-        echo '<a href="register_customer.php">Registrer deg som Kunde</a>';
-        echo '</div>';
-        echo '</div>';
-    }
-    ?>
+    <a href="cart.php" class="cart-button">Se Handlekurv</a>
 
     <footer>
         <p>Er du en restaurant-eier? <a href="login.php">Logg inn her</a>.</p>

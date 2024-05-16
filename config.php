@@ -5,6 +5,9 @@ define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'matlevering');
 
+
+date_default_timezone_set('Europe/Oslo');
+
 // Forsøk å koble til databasen
 try {
     $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);

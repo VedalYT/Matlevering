@@ -12,9 +12,10 @@ document.getElementById('restaurant-select').addEventListener('change', function
                         dishDiv.classList.add('dish');
                         dishDiv.innerHTML = `
                             <h3>${dish.dish_name}</h3>
-                            <img src="${dish.image_url}" alt="${dish.dish_name}" width="200">
+                            <img src="${dish.image_url}" alt="${dish.dish_name}">
                             <p>${dish.description}</p>
                             <p>Pris: ${dish.price} NOK</p>
+                            <button class="cart-button" onclick="addToCart('${dish.dish_name}', ${dish.price})">Legg til i Handlekurv</button>
                         `;
                         menuContainer.appendChild(dishDiv);
                     });
@@ -30,3 +31,15 @@ document.getElementById('restaurant-select').addEventListener('change', function
         document.getElementById('menu-container').innerHTML = '';
     }
 });
+
+function addToCart(dishName, price) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingDish = cart.find(item => item.dishName === dishName);
+    if (existingDish) {
+        existingDish.quantity += 1;
+    } else {
+        cart.push({ dishName, price, quantity: 1 });
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${dishName} er lagt til i handlekurven.`);
+}
