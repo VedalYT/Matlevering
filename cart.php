@@ -104,16 +104,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .total {
             font-weight: bold;
         }
-        .checkout-button, .update-button, .history-button {
-            padding: 10px 20px;
-            background-color: #28a745;
+        .checkout-button {
+            padding: 15px 30px;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
         }
-        .checkout-button:hover, .update-button:hover, .history-button:hover {
-            background-color: #218838;
+        .checkout-button:hover {
+            background-color: #0056b3;
+        }
+        .history-button {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .history-button:hover {
+            background-color: #138496;
         }
         .delete-button {
             padding: 5px 10px;
