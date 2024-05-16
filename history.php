@@ -44,18 +44,16 @@ unset($pdo);
         h1 {
             margin-bottom: 20px;
         }
-        table {
+        .order {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 80%;
-            border-collapse: collapse;
             margin-bottom: 20px;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
+        .order p {
+            margin: 5px 0;
         }
         .back-button, .delete-history-button {
             padding: 10px 20px;
@@ -82,24 +80,20 @@ unset($pdo);
     <a href="cart.php" class="back-button">Tilbake</a>
     <h1>Din Bestillingshistorikk</h1>
     <?php if (count($orders) > 0): ?>
-        <table>
-            <tr>
-                <th>Bestillings-ID</th>
-                <th>Bestillingsdetaljer</th>
-                <th>Total</th>
-                <th>Bestillingstidspunkt</th>
-                <th>Leveringstidspunkt</th>
-            </tr>
-            <?php foreach ($orders as $order): ?>
-                <tr>
-                    <td><?php echo $order['id']; ?></td>
-                    <td><?php echo nl2br(htmlspecialchars(json_encode(json_decode($order['items']), JSON_PRETTY_PRINT))); ?></td>
-                    <td><?php echo number_format($order['total'], 2); ?> NOK</td>
-                    <td><?php echo $order['order_time']; ?></td>
-                    <td><?php echo $order['delivery_time']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
+        <?php foreach ($orders as $order): ?>
+            <div class="order">
+                <p><strong>Bestillings-ID:</strong> <?php echo $order['id']; ?></p>
+                <?php
+                $items = json_decode($order['items'], true);
+                foreach ($items as $item):
+                ?>
+                    <p><strong>Bestillingsdetaljer:</strong> <?php echo $item['dishName']; ?> | Pris: <?php echo $item['price']; ?> NOK | Antall: <?php echo $item['quantity']; ?></p>
+                <?php endforeach; ?>
+                <p><strong>Total:</strong> <?php echo number_format($order['total'], 2); ?> NOK</p>
+                <p><strong>Bestillingstidspunkt:</strong> <?php echo $order['order_time']; ?></p>
+                <p><strong>Leveringstidspunkt:</strong> <?php echo $order['delivery_time']; ?></p>
+            </div>
+        <?php endforeach; ?>
         <form method="post" action="history.php">
             <button type="submit" name="delete_history" class="delete-history-button">Slett Historikk</button>
         </form>
