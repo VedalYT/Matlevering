@@ -108,9 +108,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .delete-button:hover {
             background-color: #c82333;
         }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .dish-img {
+            width: 50px;
+            height: auto;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
+    <a href="index.php" class="back-button">Tilbake</a>
     <h1>Handlekurv</h1>
     <div id="cart-container"></div>
     <button class="checkout-button" onclick="checkout()">Bekreft Bestilling</button>
@@ -125,12 +145,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return;
             }
 
-            let cartTable = '<table><tr><th>Rettnavn</th><th>Pris</th><th>Antall</th><th>Total</th><th>Handling</th></tr>';
+            let cartTable = '<table><tr><th>Bilde</th><th>Rettnavn</th><th>Pris</th><th>Antall</th><th>Total</th><th>Handling</th></tr>';
             let total = 0;
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 cartTable += `<tr>
+                    <td><img src="${item.image}" alt="${item.dishName}" class="dish-img"></td>
                     <td>${item.dishName}</td>
                     <td>${item.price.toFixed(2)} NOK</td>
                     <td><input type="number" min="1" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)"></td>
@@ -138,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td><button class="delete-button" onclick="removeFromCart(${index})">Slett</button></td>
                 </tr>`;
             });
-            cartTable += `<tr class="total"><td colspan="3">Total</td><td colspan="2">${total.toFixed(2)} NOK</td></tr></table>`;
+            cartTable += `<tr class="total"><td colspan="4">Total</td><td colspan="2">${total.toFixed(2)} NOK</td></tr></table>`;
             cartContainer.innerHTML = cartTable;
         }
 

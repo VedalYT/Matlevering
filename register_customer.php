@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['customer_id'] = $customer_id;
                 $_SESSION['email'] = $email;
 
-                header('Location: index.php');
+                header('Location: index.html');
                 exit;
             } else {
                 $error = "Noe gikk galt. Vennligst prøv igjen senere.";
@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Registrer Kunde</title>
     <style>
-        /* Legg til stiler her */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
@@ -62,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
             text-align: center;
+            position: relative;
         }
         .register-container h2 {
             margin-bottom: 20px;
@@ -92,12 +92,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .register-container button:hover {
             background-color: #0056b3;
         }
-        .error {
+        .register-container .error {
             color: red;
             margin-bottom: 15px;
         }
+        .register-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .register-container a:hover {
+            text-decoration: underline;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
+<a href="index.php" class="back-button">Tilbake</a>
 <body>
     <div class="register-container">
         <h2>Registrer deg som kunde</h2>
