@@ -65,6 +65,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button type="submit">Logg inn</button>
     </form>
     <?php if (isset($error)) { echo "<p>$error</p>"; } ?>
-    <p>Har du ikke en konto? <a href="register.php">Registrer deg her</a>.</p>
 </body>
 </html>
