@@ -8,16 +8,19 @@ if (!isset($_SESSION['customer_loggedin']) || $_SESSION['customer_loggedin'] !==
 // Sett tidssonen til norsk tid (Oslo)
 date_default_timezone_set('Europe/Oslo');
 
+$total = 0; // Initialiser $total utenfor if-blokken
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Hent handlekurven fra lokal lagring
     $cartJson = $_POST['cart'];
     $cart = json_decode($cartJson, true);
 
-    // Beregn totalpris
-    $total = 0;
+    // Beregn totalpris inkludert utkjøringsavgift
     foreach ($cart as $item) {
         $total += $item['price'] * $item['quantity'];
     }
+    // Legg til utkjøringsavgift
+    $total += 60;
 
     // Sett opp bestillingsdata
     $orderTime = date('Y-m-d H:i:s');
@@ -72,7 +75,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            background-image: url('cart.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0; /* Nullstill kroppsmarginen for å fjerne eventuelle mellomrom */
+            padding: 0; /* Nullstill kroppspaddingen for å fjerne eventuelle mellomrom */
+            height: 100vh; /* Setter høyden til 100% av visningshøyden for å dekke hele skjermen */
+            justify-content: center; /* Sentrer innholdet vertikalt */
         }
+        .cart-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 600px; /* Begrens bredden på handlekurvboksen for å unngå at den blir for bred */
+            width: 100%; /* Sørg for at boksen tar opp hele tilgjengelig bredde */
+        }
+        .cart-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .back-button {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .checkout-button {
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .checkout-button:hover {
+            background-color: #0056b3;
+        }
+        .history-button {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .history-button:hover {
+            background-color: #138496;
+        }
+        .dish-img {
+            width: 50px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        
         .confirmation {
             text-align: center;
             margin-top: 50px;
@@ -162,79 +232,89 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
+<div class="cart-section">
     <a href="index.php" class="back-button">Tilbake</a>
     <h1>Handlekurv</h1>
     <div id="cart-container"></div>
+    <table>
+        <tr class="total">
+           
+  
+    </table>
     <button class="checkout-button" onclick="checkout()">Bekreft Bestilling</button>
     <a href="history.php" class="history-button">Se Bestillingshistorikk</a>
+</div>
 
-    <script>
-        function loadCart() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const cartContainer = document.getElementById('cart-container');
-            if (cart.length === 0) {
-                cartContainer.innerHTML = '<p>Handlekurven er tom.</p>';
-                document.querySelector('.checkout-button').style.display = 'none';
-                return;
-            }
-
-            let cartTable = '<table><tr><th>Bilde</th><th>Rettnavn</th><th>Pris</th><th>Antall</th><th>Total</th><th>Handling</th></tr>';
-            let total = 0;
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                cartTable += `<tr>
-                    <td><img src="${item.image}" alt="${item.dishName}" class="dish-img"></td>
-                    <td>${item.dishName}</td>
-                    <td>${item.price.toFixed(2)} NOK</td>
-                    <td><input type="number" min="1" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)"></td>
-                    <td>${itemTotal.toFixed(2)} NOK</td>
-                    <td><button class="delete-button" onclick="removeFromCart(${index})">Slett</button></td>
-                </tr>`;
-            });
-            cartTable += `<tr class="total"><td colspan="4">Total</td><td colspan="2">${total.toFixed(2)} NOK</td></tr></table>`;
-            cartContainer.innerHTML = cartTable;
+<script>
+    function loadCart() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartContainer = document.getElementById('cart-container');
+        if (cart.length === 0) {
+            cartContainer.innerHTML = '<p>Handlekurven er tom.</p>';
+            document.querySelector('.checkout-button').style.display = 'none';
+            return;
         }
 
-        function updateQuantity(index, quantity) {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart[index].quantity = parseInt(quantity);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            loadCart();
-        }
+        let cartTable = '<table><tr><th>Bilde</th><th>Rettnavn</th><th>Pris</th><th>Antall</th><th>Total</th><th>Handling</th></tr>';
+        let total = 0;
+        cart.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            cartTable += `<tr>
+                <td><img src="${item.image}" alt="${item.dishName}" class="dish-img"></td>
+                <td>${item.dishName}</td>
+                <td>${item.price.toFixed(2)} NOK</td>
+                <td><input type="number" min="1" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)"></td>
+                <td>${itemTotal.toFixed(2)} NOK</td>
+                <td><button class="delete-button" onclick="removeFromCart(${index})">Slett</button></td>
+            </tr>`;
+        });
+        total += 60; // Legg til utkjøringsavgift
+        cartTable += `<tr class="total"><td colspan="4">Utkjøringsavgift</td><td colspan="2">60.00 NOK</td></tr>`;
+        cartTable += `<tr class="total"><td colspan="4">Total</td><td colspan="2">${total.toFixed(2)} NOK</td></tr>`;
+        cartContainer.innerHTML = cartTable;
+        document.getElementById('total-price').innerText = total.toFixed(2) + ' NOK';
+    }
 
-        function removeFromCart(index) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            loadCart();
-        }
-
-        function checkout() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cart.length === 0) {
-                alert('Handlekurven er tom.');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('cart', JSON.stringify(cart));
-
-            fetch('cart.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.body.innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Noe gikk galt. Vennligst prøv igjen senere.');
-            });
-        }
-
+    function updateQuantity(index, quantity) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart[index].quantity = parseInt(quantity);
+        localStorage.setItem('cart', JSON.stringify(cart));
         loadCart();
-    </script>
+    }
+
+    function removeFromCart(index) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        loadCart();
+    }
+
+    function checkout() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert('Handlekurven er tom.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('cart', JSON.stringify(cart));
+
+        fetch('cart.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.body.innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Noe gikk galt. Vennligst prøv igjen senere.');
+        });
+    }
+
+    loadCart();
+</script>
 </body>
 </html>

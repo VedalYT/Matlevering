@@ -1,3 +1,21 @@
+<?php
+    session_start();
+    if (isset($_SESSION['customer_loggedin']) && $_SESSION['customer_loggedin'] === true) {
+        echo '<div class="user-info">';
+        echo '<p>Logget inn som: ' . htmlspecialchars($_SESSION['email']) . '</p>';
+        echo '<a href="logout_customer.php">Logg ut</a>';
+     
+        echo '</div>';
+    } else {
+        echo '<div class="dropdown">';
+        echo '<button class="dropbtn">Logg inn / Registrer</button>';
+        echo '<div class="dropdown-content">';
+        echo '<a href="login_customer.php">Logg inn som Kunde</a>';
+        echo '<a href="register_customer.php">Registrer deg som Kunde</a>';
+        echo '</div>';
+        echo '</div>';
+    }
+    ?>
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -6,14 +24,24 @@
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js" defer></script>
     <style>
-        body {
+              body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         h1 {
             margin-bottom: 20px;
@@ -36,6 +64,7 @@
             margin: 10px;
             width: 200px;
             text-align: center;
+            background-color: white;
         }
         .dish img {
             width: 100%;
@@ -133,28 +162,21 @@
         .history-button:hover {
             background-color: #138496;
         }
+        
+        .restaurant-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
     </style>
 </head>
 <body>
-    <?php
-    session_start();
-    if (isset($_SESSION['customer_loggedin']) && $_SESSION['customer_loggedin'] === true) {
-        echo '<div class="user-info">';
-        echo '<p>Logget inn som: ' . htmlspecialchars($_SESSION['email']) . '</p>';
-        echo '<a href="logout_customer.php">Logg ut</a>';
-     
-        echo '</div>';
-    } else {
-        echo '<div class="dropdown">';
-        echo '<button class="dropbtn">Logg inn / Registrer</button>';
-        echo '<div class="dropdown-content">';
-        echo '<a href="login_customer.php">Logg inn som Kunde</a>';
-        echo '<a href="register_customer.php">Registrer deg som Kunde</a>';
-        echo '</div>';
-        echo '</div>';
-    }
-    ?>
+ 
 
+<div class="restaurant-section">
     <h1>Velg en restaurant</h1>
     <select id="restaurant-select">
         <option value="">Velg en restaurant</option>
